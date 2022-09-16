@@ -1,6 +1,8 @@
 package java_project;
 
 
+import java_project.A_basics.a_helloworld.HelloWorldEngine1;
+import java_project.A_basics.alarmexample.AlaramExampleEngine1;
 import java_project.alarmexample.Door;
 import java_project.alarmexample.autowiring.Door3;
 import java_project.alarmexample.configbasedbeans.AlarmBeansConfigFile;
@@ -11,7 +13,8 @@ import java_project.alarmexample.qualifier.Door4;
 import java_project.alarmexample.withAnnotation.Alarm2;
 import java_project.alarmexample.withAnnotation.Door2;
 import java_project.config.ComponentScanConfig;
-import java_project.helloworld.HelloWorld;
+import java_project.entityexample.UserEntity;
+import java_project.A_basics.a_helloworld.HelloWorld;
 import java_project.repositoryexample.Student;
 import java_project.repositoryexample.StudentRepository;
 import org.springframework.context.ApplicationContext;
@@ -19,10 +22,18 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 
 public class MainActivity  extends  Throwable{
 	public static void helloWorld(){
-		ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("HelloWorldBeans.xml");
 		HelloWorld obj = (HelloWorld) context.getBean("helloWorld");
 		obj.getMessage();
 	}
@@ -139,29 +150,49 @@ public class MainActivity  extends  Throwable{
 		context.close();
 	}
 
-	public static void userEntity() {
-//		EntityManagerFactory emf= Persistence.createEntityManagerFactory("user_details");
-//		EntityManager em=emf.createEntityManager();
-//		em.getTransaction().begin();
-//
-//		UserEntity s1=new UserEntity();
-//		s1.setUserId(1);
-//		s1.setEmail("user1@gmail.com");
-//		s1.setPhone("9123456789");
-//		UserEntity s2=new UserEntity();
-//		s1.setUserId(2);
-//		s1.setEmail("user2@gmail.com");
-//		s1.setPhone("8123456789");
-//
-//
-//		em.persist(s1);
-//		em.persist(s2);
-//
-//		em.getTransaction().commit();
-//
-//		emf.close();
-//		em.close();
+
+	public static void jdbcTest(){
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con=DriverManager.getConnection(
+					"jdbc:mysql://127.0.0.1:3306/mytestdb","root","**********");
+
+			Statement stmt=con.createStatement();
+			ResultSet rs=stmt.executeQuery("select * from users");
+			while(rs.next())
+				System.out.println(rs.getInt(1)+"  "+rs.getString(2)+"  "+rs.getString(3));
+			con.close();
+		}catch(Exception e){ System.out.println(e);}
 	}
+
+	public static void userEntity() {
+		EntityManagerFactory emf= Persistence.createEntityManagerFactory("user_details");
+		EntityManager em=emf.createEntityManager();
+		em.getTransaction().begin();
+
+		UserEntity s1=new UserEntity();
+		s1.setUserId(1);
+		s1.setEmail("user1@gmail.com");
+		s1.setPhone("9123456789");
+		UserEntity s2=new UserEntity();
+		s1.setUserId(2);
+		s1.setEmail("user2@gmail.com");
+		s1.setPhone("8123456789");
+
+
+		em.persist(s1);
+		em.persist(s2);
+
+		em.getTransaction().commit();
+
+		emf.close();
+		em.close();
+
+
+
+	}
+
+
 
 
 	public void hybernateExample() {
@@ -180,6 +211,8 @@ public class MainActivity  extends  Throwable{
 //		HibernateUtil.shutdown();
 	}
 	public static void main(String[] args) {
+		HelloWorldEngine1.main();
+		AlaramExampleEngine1.main();
 		//helloWorld();
 		//alarmExampleTestWithXMLConfig();
 
@@ -189,7 +222,7 @@ public class MainActivity  extends  Throwable{
 		//alarmExampleTestAutoWiringWithQalifier();
 		//springConfigWithJavaCode();
 		//alarmExampleWithJavaConfigBasedBeans();
-		alarmExamplePropertietFile();
+		//alarmExamplePropertietFile();
 		//demoRepository();
 		//userEntity();
 	}

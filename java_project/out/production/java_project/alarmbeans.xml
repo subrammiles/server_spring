@@ -6,22 +6,22 @@
     xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="doorBeanWithSoundAlarm" class="java_project.alarmexample.Door">
+    <bean id="doorBeanWithSoundAlarm" class="java_project.A_basics.alarmexample.Door">
     
       <property name="alarm" ref="soundAlarmBean"></property>
     </bean>
     
-     <bean id="doorBeanWithVisualAlarm" class="java_project.alarmexample.Door">
+     <bean id="doorBeanWithVisualAlarm" class="java_project.A_basics.alarmexample.Door">
     
       <property name="alarm" ref="visualAlarmBean"></property>
     </bean>
     
-     <bean id="soundAlarmBean" class="java_project.alarmexample.SoundAlarm">
+     <bean id="soundAlarmBean" class="java_project.A_basics.alarmexample.SoundAlarm">
     
       
     </bean>
     
-     <bean id="visualAlarmBean" class="java_project.alarmexample.VisualAlarm">
+     <bean id="visualAlarmBean" class="java_project.A_basics.alarmexample.VisualAlarm">
     
       
     </bean>
