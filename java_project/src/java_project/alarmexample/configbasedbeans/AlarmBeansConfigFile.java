@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@PropertySource("classpath:alarm.properties")
+@PropertySource("classpath:voters_age.properties")
 public class AlarmBeansConfigFile {
 
 
@@ -26,14 +26,14 @@ public class AlarmBeansConfigFile {
         return visualAlarm;
     }
 
-    @Bean Door5 door(){
-           Door5 door=new Door5();
-           if(alarmType==1){
-               door.setAlarm(visualAlarm());
-           }else{
-               door.setAlarm(soundAlarm());
-           }
-           return door;
-    }
+//    @Bean Door5 door(){
+//           Door5 door=new Door5();
+//           if(alarmType==1){
+//               door.setAlarm(visualAlarm());
+//           }else{
+//               door.setAlarm(soundAlarm());
+//           }
+//           return door;
+//    }
 
 }

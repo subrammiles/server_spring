@@ -1,10 +1,9 @@
-package java_project.b_alarmbeanexample;
+package java_project.A_xml_based_config.a_helloworld;
 
-import java_project.A_basics.a_helloworld.HelloWorld;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class Engine1 {
+public class HelloWorldEngine1 {
 
     public static void main(){
         helloWorld();

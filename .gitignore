@@ -40,3 +40,16 @@ target
 secrets.yml
 .gradletasknamecache
 .sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+
+/**/bin/
+**/bin/
+
+/java_project/bin/
+/**/bin/

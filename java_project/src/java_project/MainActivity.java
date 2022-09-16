@@ -1,25 +1,22 @@
 package java_project;
 
 
-import java_project.A_basics.a_helloworld.HelloWorldEngine1;
-import java_project.A_basics.alarmexample.AlaramExampleEngine1;
-import java_project.alarmexample.Door;
+import java_project.A_java_based.a_simple.SimpleJavaBasesConfigEngine;
+import java_project.A_java_based.b_multipulconfiguration.MultipulJavaConfigEngine;
+import java_project.A_java_based.c_InjectingBeanDependencies.InjectingBeanEngine;
+import java_project.A_java_based.d_importAnnotation.ImportAnnotationEngine;
 import java_project.alarmexample.autowiring.Door3;
 import java_project.alarmexample.configbasedbeans.AlarmBeansConfigFile;
 import java_project.alarmexample.configbasedbeans.Door5;
 import java_project.alarmexample.configbasedbeans.SoundAlarm5;
 import java_project.alarmexample.configbasedbeans.VisualAlarm5;
 import java_project.alarmexample.qualifier.Door4;
-import java_project.alarmexample.withAnnotation.Alarm2;
-import java_project.alarmexample.withAnnotation.Door2;
 import java_project.config.ComponentScanConfig;
 import java_project.entityexample.UserEntity;
-import java_project.A_basics.a_helloworld.HelloWorld;
 import java_project.repositoryexample.Student;
 import java_project.repositoryexample.StudentRepository;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import javax.persistence.EntityManager;
@@ -32,29 +29,9 @@ import java.sql.Statement;
 
 
 public class MainActivity  extends  Throwable{
-	public static void helloWorld(){
-		ApplicationContext context = new ClassPathXmlApplicationContext("HelloWorldBeans.xml");
-		HelloWorld obj = (HelloWorld) context.getBean("helloWorld");
-		obj.getMessage();
-	}
-
-	public static  void alarmExampleTestWithAnnotations() {
-		ApplicationContext context=new FileSystemXmlApplicationContext("classpath:componentscan.xml");
 
 
-		Alarm2 soundAlarm=context.getBean("soundAlarm2",Alarm2.class);
-		Door2 doorWithSoundAlarm=new Door2();
-		doorWithSoundAlarm.setAlarm(soundAlarm);
-		doorWithSoundAlarm.open();
-		doorWithSoundAlarm.close();
 
-		Alarm2 visualAlarm=context.getBean("visualAlarmBean",Alarm2.class);
-		Door2 doorWithVisualAlarm=new Door2();
-		doorWithVisualAlarm.setAlarm(visualAlarm);
-		doorWithVisualAlarm.open();
-		doorWithVisualAlarm.close();
-
-	}
 
 	public static  void alarmExampleTestAutoWiring() {
 		ApplicationContext context=new FileSystemXmlApplicationContext("classpath:componentscan.xml");
@@ -122,16 +99,6 @@ public class MainActivity  extends  Throwable{
 
 
 
-	public static  void alarmExampleTestWithXMLConfig() {
-		ApplicationContext context=new FileSystemXmlApplicationContext("classpath:alarmbeans.xml");
-		Door door=context.getBean("doorBeanWithSoundAlarm",Door.class);
-		door.open();
-		door.close();
-
-		Door door2=context.getBean("doorBeanWithVisualAlarm",Door.class);
-		door2.open();
-		door2.close();
-	}
 
 
 	public static void demoRepository() {
@@ -211,8 +178,19 @@ public class MainActivity  extends  Throwable{
 //		HibernateUtil.shutdown();
 	}
 	public static void main(String[] args) {
-		HelloWorldEngine1.main();
-		AlaramExampleEngine1.main();
+//		HelloWorldEngine1.main();
+//		AlaramExampleEngine1.main();
+//		AgeToVoteEngine.main();
+//		MyTestComponentMain.main();
+		SimpleJavaBasesConfigEngine.main();
+		MultipulJavaConfigEngine.main();
+		InjectingBeanEngine.main();
+		ImportAnnotationEngine.main();
+
+
+		alarmExampleWithJavaConfigBasedBeans();
+
+
 		//helloWorld();
 		//alarmExampleTestWithXMLConfig();
 

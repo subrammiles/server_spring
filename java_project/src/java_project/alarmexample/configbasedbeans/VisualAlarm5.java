@@ -11,6 +11,6 @@ public class VisualAlarm5 implements Alarm5 {
 
     @Override
     public void deactivate() {
-        System.out.println("Visual Alarm activated");
+        System.out.println("Visual Alarm deactivated");
     }
 }

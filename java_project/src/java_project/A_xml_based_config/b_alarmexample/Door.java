@@ -1,6 +1,4 @@
-package java_project.A_basics.alarmexample;
-
-import java_project.alarmexample.Alarm;
+package java_project.A_xml_based_config.b_alarmexample;
 
 public class Door {
     IAlarm alarm;

@@ -1,4 +1,4 @@
-package java_project.A_basics.a_helloworld;
+package java_project.A_xml_based_config.a_helloworld;
 
 public class HelloWorld {
     /*This must be a private variable*/

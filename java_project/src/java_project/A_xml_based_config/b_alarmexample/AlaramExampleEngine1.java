@@ -1,8 +1,6 @@
-package java_project.A_basics.alarmexample;
+package java_project.A_xml_based_config.b_alarmexample;
 
-import java_project.A_basics.a_helloworld.HelloWorld;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 public class AlaramExampleEngine1 {
@@ -35,12 +33,12 @@ public class AlaramExampleEngine1 {
     }
         public static  void testDoorBean(ApplicationContext context) {
             System.out.println("<<<<Door  Bean Test>>>>>");
-            /*Now get the Dooe  Bean*/
-            /*We are passing Sound Alarm to Door*/
+            /*Now get the Sound Alarm*/
+            /*We are passing Sound Alarm to Door   Bean in XML*/
             Door door=context.getBean("doorBeanWithSoundAlarm", Door.class);
             door.open();
             door.close();
-            /*We are passing Visual Alarm to Door*/
+            /*We are passing Visual Alarm to Door   Bean in XML*/
             Door door2=context.getBean("doorBeanWithVisualAlarm", Door.class);
             door2.open();
             door2.close();
