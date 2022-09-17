@@ -6,11 +6,7 @@
     xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id = "helloWorld" class = "java_project.C_events.a_applicationcontextevents.HelloWorld">
-        <property name = "message" value = "Hello World!"/>
-    </bean>
-
-    <bean id = "cStartEventHandler" class = "java_project.C_events.a_applicationcontextevents.CStartEventHandler"/>
-    <bean id = "cStopEventHandler" class = "java_project.C_events.a_applicationcontextevents.CStopEventHandler"/>
+    <bean id = "customEventHandler" class = "java_project.C_events.b_custome.CustomEventHandler"/>
+    <bean id = "customEventPublisher" class = "java_project.C_events.b_custome.CustomEventPublisher"/>
 
 </beans>

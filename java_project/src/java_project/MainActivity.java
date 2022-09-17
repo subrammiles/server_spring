@@ -1,10 +1,15 @@
 package java_project;
 
 
+import java_project.A_AutoWiring.autowiring.AutoWiredBasicEngine;
+import java_project.A_di_and_ioc.DIByConstructor.DiByConstrutorEngine;
 import java_project.A_java_based.a_simple.SimpleJavaBasesConfigEngine;
 import java_project.A_java_based.b_multipulconfiguration.MultipulJavaConfigEngine;
 import java_project.A_java_based.c_InjectingBeanDependencies.InjectingBeanEngine;
 import java_project.A_java_based.d_importAnnotation.ImportAnnotationEngine;
+import java_project.A_java_based.e_LifecycleCallbacks.LifeCycleCallBackEngine;
+import java_project.C_events.a_applicationcontextevents.ApplicationEventTestEngine;
+import java_project.C_events.b_custome.CustomeEventEngine;
 import java_project.alarmexample.autowiring.Door3;
 import java_project.alarmexample.configbasedbeans.AlarmBeansConfigFile;
 import java_project.alarmexample.configbasedbeans.Door5;
@@ -13,6 +18,7 @@ import java_project.alarmexample.configbasedbeans.VisualAlarm5;
 import java_project.alarmexample.qualifier.Door4;
 import java_project.config.ComponentScanConfig;
 import java_project.entityexample.UserEntity;
+import java_project.hibernate.a_test1.HibernateTest1Engine;
 import java_project.repositoryexample.Student;
 import java_project.repositoryexample.StudentRepository;
 import org.springframework.context.ApplicationContext;
@@ -182,13 +188,19 @@ public class MainActivity  extends  Throwable{
 //		AlaramExampleEngine1.main();
 //		AgeToVoteEngine.main();
 //		MyTestComponentMain.main();
-		SimpleJavaBasesConfigEngine.main();
-		MultipulJavaConfigEngine.main();
-		InjectingBeanEngine.main();
-		ImportAnnotationEngine.main();
+//		SimpleJavaBasesConfigEngine.main();
+//		MultipulJavaConfigEngine.main();
+//		InjectingBeanEngine.main();
+//		ImportAnnotationEngine.main();
+//		LifeCycleCallBackEngine.main();
+//		ApplicationEventTestEngine.main();
+//		CustomeEventEngine.main();
+//		DiByConstrutorEngine.main();
+//		AutoWiredBasicEngine.main();
+		HibernateTest1Engine.main();
 
 
-		alarmExampleWithJavaConfigBasedBeans();
+
 
 
 		//helloWorld();

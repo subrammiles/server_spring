@@ -1,2 +1,16 @@
-package java_project.C_events.b_custome;public class CustomEventPublisher {
+package java_project.C_events.b_custome;
+
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
+
+public class CustomEventPublisher implements ApplicationEventPublisherAware {
+    private ApplicationEventPublisher publisher;
+
+    public void setApplicationEventPublisher (ApplicationEventPublisher publisher) {
+        this.publisher = publisher;
+    }
+    public void publish() {
+        CustomEvent ce = new CustomEvent(this);
+        publisher.publishEvent(ce);
+    }
 }

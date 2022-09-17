@@ -6,24 +6,11 @@
     xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="doorBeanWithSoundAlarm" class="java_project.A_xml_based_config.b_alarmexample.Door">
-    
-      <property name="alarm" ref="soundAlarmBean"></property>
+    <bean id = "helloWorld" class = "java_project.C_events.a_applicationcontextevents.HelloWorld">
+        <property name = "message" value = "Hello World!"/>
     </bean>
-    
-     <bean id="doorBeanWithVisualAlarm" class="java_project.A_xml_based_config.b_alarmexample.Door">
-    
-      <property name="alarm" ref="visualAlarmBean"></property>
-    </bean>
-    
-     <bean id="soundAlarmBean" class="java_project.A_xml_based_config.b_alarmexample.SoundAlarm">
-    
-      
-    </bean>
-    
-     <bean id="visualAlarmBean" class="java_project.A_xml_based_config.b_alarmexample.VisualAlarm">
-    </bean>
-    
-    
+
+    <bean id = "cStartEventHandler" class = "java_project.C_events.a_applicationcontextevents.CStartEventHandler"/>
+    <bean id = "cStopEventHandler" class = "java_project.C_events.a_applicationcontextevents.CStopEventHandler"/>
 
 </beans>
