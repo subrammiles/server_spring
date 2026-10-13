@@ -1,0 +1,20 @@
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-5level %logger{0} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Keep framework output quiet so the lesson output is readable -->
+    <root level="WARN">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <!-- Lessons 17/18: print every SQL statement Hibernate sends to the database -->
+    <logger name="org.hibernate.SQL" level="DEBUG"/>
+    <!-- Hibernate warns that H2 is not a production database; we know -->
+    <logger name="org.hibernate.orm.deprecation" level="ERROR"/>
+
+    <!-- Uncomment to see what the container does at startup -->
+    <!-- <logger name="org.springframework" level="DEBUG"/> -->
+</configuration>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Lesson 02: the classic (pre-annotation) way to configure Spring.
+  Each <bean> is a "recipe": which class to create and what to inject into it.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Simple beans: no dependencies -->
+    <bean id="soundAlarm" class="com.learn.spring.l01_without_spring.SoundAlarm"/>
+    <bean id="visualAlarm" class="com.learn.spring.l01_without_spring.VisualAlarm"/>
+
+    <!-- CONSTRUCTOR injection: calls new Door(soundAlarm) -->
+    <bean id="frontDoor" class="com.learn.spring.l01_without_spring.Door">
+        <constructor-arg ref="soundAlarm"/>
+    </bean>
+
+    <bean id="backDoor" class="com.learn.spring.l01_without_spring.Door">
+        <constructor-arg ref="visualAlarm"/>
+    </bean>
+
+    <!-- SETTER injection: a literal value and a list of references -->
+    <bean id="securitySystem" class="com.learn.spring.l02_xml_config.SecuritySystem">
+        <property name="name" value="Home Security v1"/>
+        <property name="alarms">
+            <list>
+                <ref bean="soundAlarm"/>
+                <ref bean="visualAlarm"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- An alias is a second name for the same bean -->
+    <alias name="frontDoor" alias="mainEntrance"/>
+</beans>
