@@ -15,6 +15,15 @@
 - **Single constructor** means `@Autowired` is optional.
 - **Layered architecture**: Repository, Service, (Controller). Each layer depends only on the one below.
 
+## Circular dependencies (`circular/`)
+A needs B and B needs A. With **constructor injection** Spring cannot create either one first, so startup fails with
+`BeanCurrentlyInCreationException`. That is a good thing: you find the problem at startup, not in production.
+| Option | How | Verdict |
+|---|---|---|
+| Redesign | move the shared logic into a third bean both depend on (`TaxRules`), or publish an event (lesson 10) | **the real fix** |
+| `@Lazy` on one constructor parameter | Spring injects a proxy and creates the real bean on first use | a workaround that hides the smell |
+| Setter/field injection | plain Spring allows these cycles by default | avoid. **Spring Boot forbids cycles** (`spring.main.allow-circular-references=false`) |
+
 ## Rule of thumb
 Use **constructor injection** with `final` fields. It is explicit, immutable and easy to test (lesson 20 shows
 `OrderService` tested with Mockito and no Spring at all).
@@ -26,4 +35,5 @@ mvn -q compile exec:java -Dexec.args=04
 
 ## Try it
 - Remove `@Repository` from `InMemoryOrderRepository` and read the `NoSuchBeanDefinitionException`.
+- In `Cycles`, remove `@Lazy` from `LazyOrderDesk` and run the demo again.
 - Add a second constructor to `OrderService`. Spring no longer knows which to use. Add `@Autowired` to pick one.

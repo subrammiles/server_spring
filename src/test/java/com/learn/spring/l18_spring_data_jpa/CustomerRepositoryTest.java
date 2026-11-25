@@ -7,6 +7,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -67,5 +69,31 @@ class CustomerRepositoryTest {
         Customer anil = repo.findByEmailIgnoreCase("anil@mail.com").orElseThrow();
         assertThat(anil.getCreatedAt()).isNotNull();
         assertThat(anil.getUpdatedAt()).isNotNull();
+    }
+
+    @Test
+    void specificationsBuildQueriesFromOptionalFilters() {
+        assertThat(repo.findAll(CustomerSpecs.matching(new CustomerFilter(null, null, null, null)))).hasSize(4);
+        assertThat(repo.findAll(CustomerSpecs.matching(new CustomerFilter(null, "Hyderabad", 40, null))))
+                .extracting(Customer::getName).containsExactly("Chetan");
+        assertThat(repo.findAll(CustomerSpecs.matching(new CustomerFilter("AN", null, null, true)), Sort.by("name")))
+                .extracting(Customer::getName).containsExactly("Anil", "Bhavana", "Chetan");
+
+        Page<Customer> page = repo.findAll(CustomerSpecs.livesIn("Chennai").or(CustomerSpecs.atLeast(40)),
+                PageRequest.of(0, 1, Sort.by("name")));
+        assertThat(page.getTotalElements()).isEqualTo(2);
+        assertThat(page.getContent()).extracting(Customer::getName).containsExactly("Chetan");
+    }
+
+    @Test
+    void queryByExampleMatchesTheFilledInFields() {
+        Customer probe = new Customer("an", null, "Hyderabad", 0);
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnorePaths("age", "active")
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        assertThat(repo.findAll(Example.of(probe, matcher), Sort.by("name")))
+                .extracting(Customer::getName).containsExactly("Anil", "Chetan");
     }
 }

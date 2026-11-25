@@ -26,6 +26,21 @@ other's half-done work), **D**urable (committed means saved).
 ## Programmatic transactions
 `TransactionTemplate.execute(status -> ...)`. Use `status.setRollbackOnly()` to roll back without an exception.
 
+## Events and transactions (`PaymentNotifications`)
+`BulkPaymentService` publishes a `PaymentSent` event for each payment, inside the transaction.
+| Listener | Runs | After a rollback |
+|---|---|---|
+| `@EventListener` | immediately, mid-transaction | has **already** sent the SMS for money that never moved |
+| `@TransactionalEventListener` (AFTER_COMMIT) | after the commit | never runs: correct |
+| `@TransactionalEventListener(phase = AFTER_ROLLBACK)` | after the rollback | runs: good for alerts and cleanup |
+
+Things to know:
+- With **no** transaction active, a `@TransactionalEventListener` silently drops the event (`fallbackExecution = true` changes that).
+- An AFTER_COMMIT listener that writes to the database needs its own transaction (`REQUIRES_NEW`): the original one is finished.
+- If the process dies between the commit and the listener, the event is **lost**. When it must not be lost (sending to Kafka,
+  emailing invoices), use the **transactional outbox** pattern: insert the event into an `outbox` table in the same
+  transaction, and let a separate job publish it. Spring Modulith's event publication registry does this for you.
+
 ## Pitfalls (all because it is proxy-based AOP, lesson 11)
 - Calling a `@Transactional` method from **the same class** (`this.x()`) ignores the annotation.
 - `@Transactional` on `private` methods does nothing.

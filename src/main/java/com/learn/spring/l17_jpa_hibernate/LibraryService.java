@@ -15,6 +15,7 @@ import com.learn.spring.l17_jpa_hibernate.entity.Tag;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
 
 @Service
@@ -123,6 +124,35 @@ public class LibraryService {
 
     public void deleteAuthor(Long authorId) {
         em.remove(em.find(Author.class, authorId));   // cascades to the author's books
+    }
+
+    // ---------- concurrency: optimistic and pessimistic locking ----------
+
+    @Transactional(readOnly = true)
+    public Book findBook(Long id) {
+        return em.find(Book.class, id);   // detached, like an object sent to a browser form and back
+    }
+
+    /**
+     * OPTIMISTIC LOCKING (@Version on Book): no lock is taken while the user edits. On save, Hibernate runs
+     *   UPDATE book SET title=?, version=version+1 WHERE id=? AND version=?
+     * If someone else saved first, the version no longer matches and the save FAILS instead of
+     * silently overwriting their change (the "lost update" problem). The caller reloads and retries,
+     * or shows the user the conflict.
+     */
+    public Book saveBook(Book edited) {
+        return em.merge(edited);
+    }
+
+    /**
+     * PESSIMISTIC LOCKING: SELECT ... FOR UPDATE. Other transactions that want to lock or change
+     * this row WAIT until we commit. Use it for short, high-contention updates (stock counters,
+     * seat booking) where retrying would be expensive. Never hold it across user think time.
+     */
+    public Book retitleWithLock(Long id, String title) {
+        Book book = em.find(Book.class, id, LockModeType.PESSIMISTIC_WRITE);
+        book.setTitle(title);
+        return book;
     }
 
     // ---------- the persistence context and fetching ----------

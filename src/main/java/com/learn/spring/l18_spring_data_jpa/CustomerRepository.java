@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,9 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * An INTERFACE only. Spring Data generates the implementation at startup.
  * JpaRepository already gives: save, saveAll, findById, findAll, findAll(Sort/Pageable),
- * count, existsById, deleteById, delete, flush...
+ * count, existsById, deleteById, delete, flush... and Query by Example: findAll(Example).
+ * JpaSpecificationExecutor adds findAll(Specification), findAll(Specification, Pageable), count(Specification)...
  */
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
+public interface CustomerRepository extends JpaRepository<Customer, Long>, JpaSpecificationExecutor<Customer> {
 
     // ---- derived queries: the query is generated from the METHOD NAME ----
 

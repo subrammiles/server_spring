@@ -21,6 +21,9 @@ public class WebMvcDemo {
                   curl -i %1$s/api/tasks/99                      (404 ProblemDetail)
                   curl -i -X POST %1$s/api/tasks -H 'Content-Type: application/json' -d '{"title":""}'   (400 validation)
                   curl -i -X DELETE %1$s/api/tasks/1
+                  curl -i -F file=@pom.xml %1$s/api/files       (multipart upload)
+                  curl -i %1$s/api/files/pom.xml                 (download)
+                  curl -i %1$s/no-such-url                        (filter header present, no X-Request-Id)
                 """.formatted(base));
         tomcat.getServer().await();
     }

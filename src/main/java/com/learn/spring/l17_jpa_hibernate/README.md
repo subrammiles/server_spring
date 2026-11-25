@@ -30,6 +30,18 @@ Spring wires them together and adds transactions. The demo logs every SQL statem
 - **N+1 problem**: 1 query for the list plus 1 per row for the association. Fix it with `JOIN FETCH`, an entity graph, or batch fetching.
   The demo counts the statements.
 
+## Concurrency: two users, one row
+Without protection, the last save wins and silently erases the other change (the **lost update**).
+| | Optimistic (`@Version`) | Pessimistic (`LockModeType.PESSIMISTIC_WRITE`) |
+|---|---|---|
+| How | `UPDATE ... WHERE id=? AND version=?`; 0 rows updated = conflict | `SELECT ... FOR UPDATE`; others wait |
+| Conflict | `OptimisticLockException` (Spring: `ObjectOptimisticLockingFailureException`) | no conflict, just waiting (or a lock timeout) |
+| Good for | most web apps: conflicts are rare, and users edit for minutes | short, hot updates: stock counters, seat booking |
+| Cost | a retry or a "someone else changed this" message | blocked threads, deadlock risk |
+
+`LibraryServiceTest.optimisticLockingRejectsAStaleUpdate` shows the conflict. Over HTTP the version travels as an
+`ETag` and comes back in `If-Match` (see `server_spring_boot` module 04).
+
 ## Queries
 JPQL (`SELECT b FROM Book b WHERE b.author.name = :name`), DTO projections (`SELECT new ...`), native SQL.
 

@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import com.learn.spring.l04_component_scan.circular.CircularDependencyDemo;
+
 public class ComponentScanDemo {
 
     public static void main(String[] args) {
@@ -18,5 +20,8 @@ public class ComponentScanDemo {
             System.out.println("Report  : " + context.getBean(ReportService.class).summary());
             System.out.println("Auditor : " + context.getBean(LegacyAuditor.class).orderCount() + " orders seen");
         }
+
+        System.out.println("\n--- Circular dependencies ---");
+        CircularDependencyDemo.main(args);
     }
 }

@@ -13,6 +13,8 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import com.learn.spring.l17_jpa_hibernate.entity.Author;
 import com.learn.spring.l17_jpa_hibernate.entity.Book;
 
+import jakarta.persistence.OptimisticLockException;
+
 /** @DirtiesContext throws the context (and its in-memory DB) away after each test: a clean DB every time. */
 @SpringJUnitConfig(JpaConfig.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -63,5 +65,30 @@ class LibraryServiceTest {
         assertThat(library.countBooksWithNativeSql()).isEqualTo(4);
         library.deleteAuthor(tolkienId);
         assertThat(library.countBooksWithNativeSql()).isEqualTo(3);
+    }
+
+    @Test
+    void optimisticLockingRejectsAStaleUpdate() {
+        Long hobbitId = library.findBooksByAuthorName("Tolkien").getFirst().getId();
+        Book alice = library.findBook(hobbitId);
+        Book bob = library.findBook(hobbitId);
+
+        alice.setTitle("Alice's title");
+        assertThat(library.saveBook(alice).getVersion()).isEqualTo(1);
+
+        bob.setTitle("Bob's title");   // bob still holds version 0
+        assertThatThrownBy(() -> library.saveBook(bob)).isInstanceOf(OptimisticLockException.class);
+        assertThat(library.findBook(hobbitId).getTitle()).isEqualTo("Alice's title");   // not overwritten
+    }
+
+    @Test
+    void pessimisticLockUpdatesUnderARowLock() {
+        Long hobbitId = library.findBooksByAuthorName("Tolkien").getFirst().getId();
+
+        library.retitleWithLock(hobbitId, "Locked title");
+
+        Book reloaded = library.findBook(hobbitId);
+        assertThat(reloaded.getTitle()).isEqualTo("Locked title");
+        assertThat(reloaded.getVersion()).isEqualTo(1);
     }
 }

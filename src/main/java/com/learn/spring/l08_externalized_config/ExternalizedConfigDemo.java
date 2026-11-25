@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
@@ -33,6 +34,14 @@ public class ExternalizedConfigDemo {
             System.out.println("admin email   = " + env.adminEmail());
             System.out.println("max users     = " + env.maxUsers());
             System.out.println("support phone = " + env.supportPhone());
+
+            System.out.println("\n--- Type conversion: Converter and Formatters ---");
+            ShippingSettings shipping = context.getBean(ShippingSettings.class);
+            System.out.println("shipping fee    = " + shipping.getFee() + "   (\"EUR 4.99\" -> Money, our Converter)");
+            System.out.println("sale ends       = " + shipping.getSaleEnds() + "   (\"31/12/2026\" -> LocalDate, @DateTimeFormat)");
+            System.out.println("delivery window = " + shipping.getDeliveryWindow() + "   (\"48h\" -> Duration, @DurationFormat)");
+            ConversionService conversion = context.getBean(ConversionService.class);
+            System.out.println("convert by hand = " + conversion.convert("usd 10.50", Money.class));
 
             System.out.println("\n--- i18n with MessageSource ---");
             System.out.println(context.getMessage("greeting", new Object[]{"Subbu"}, Locale.ENGLISH));

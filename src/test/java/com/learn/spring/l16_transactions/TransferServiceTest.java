@@ -27,9 +27,13 @@ class TransferServiceTest {
     @Autowired
     AuditService audit;
 
+    @Autowired
+    PaymentNotifications notifications;
+
     @BeforeEach
     void reset() {
         accounts.reset();
+        notifications.clear();
     }
 
     private BigDecimal alice() {
@@ -79,5 +83,19 @@ class TransferServiceTest {
 
         assertThat(bulk.payAll("ACC-1", Map.of("ACC-2", new BigDecimal("150")), new BigDecimal("200"))).isTrue();
         assertThat(alice()).isEqualByComparingTo("850");
+    }
+
+    @Test
+    void transactionalEventListenerWaitsForTheOutcome() {
+        bulk.payAll("ACC-1", Map.of("ACC-2", new BigDecimal("300")), new BigDecimal("200"));   // rolled back
+        assertThat(notifications.sent()).containsExactlyInAnyOrder(
+                "immediate: 300 ACC-1 -> ACC-2",        // too early: this payment never happened
+                "after rollback: 300 ACC-1 -> ACC-2");
+
+        notifications.clear();
+        bulk.payAll("ACC-1", Map.of("ACC-2", new BigDecimal("150")), new BigDecimal("200"));   // committed
+        assertThat(notifications.sent()).containsExactlyInAnyOrder(
+                "immediate: 150 ACC-1 -> ACC-2",
+                "after commit: 150 ACC-1 -> ACC-2");
     }
 }

@@ -3,6 +3,8 @@ package com.learn.spring.l18_spring_data_jpa;
 import java.util.List;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -51,6 +53,19 @@ public class SpringDataJpaDemo {
             System.out.println("active, 30+ : " + repo.findActiveAtLeast(30));
             System.out.println("native      : " + repo.findByCityNative("Chennai"));
             System.out.println("deactivated : " + repo.deactivateAllIn("Hyderabad") + ", active now: " + repo.countByActiveTrue());
+
+            System.out.println("\n--- Specifications: dynamic queries from optional filters ---");
+            System.out.println("city=Bengaluru        : " + repo.findAll(CustomerSpecs.matching(new CustomerFilter(null, "Bengaluru", null, null))));
+            System.out.println("name~'a', age>=30     : " + repo.findAll(CustomerSpecs.matching(new CustomerFilter("a", null, 30, null))));
+            System.out.println("composed with or()    : " + repo.findAll(CustomerSpecs.livesIn("Chennai").or(CustomerSpecs.atLeast(50))));
+
+            System.out.println("\n--- Query by Example ---");
+            Customer probe = new Customer("an", null, "Hyderabad", 0);
+            ExampleMatcher matcher = ExampleMatcher.matching()
+                    .withIgnorePaths("age", "active")   // primitives always have a value, so ignore them explicitly
+                    .withIgnoreCase()
+                    .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+            System.out.println("name~'an' in Hyderabad: " + repo.findAll(Example.of(probe, matcher)));
 
             System.out.println("\n--- auditing ---");
             Customer c = repo.findByEmailIgnoreCase("anil@mail.com").orElseThrow();

@@ -41,6 +41,19 @@ public class TransactionsDemo {
                     () -> System.out.println("   committed? " + bulk.payAll("ACC-1",
                             Map.of("ACC-2", new BigDecimal("300")), new BigDecimal("200"))));
 
+            accounts.reset();
+            PaymentNotifications notifications = context.getBean(PaymentNotifications.class);
+            notifications.clear();
+            scenario("7. Events inside a transaction that rolls back", accounts,
+                    () -> bulk.payAll("ACC-1", Map.of("ACC-2", new BigDecimal("300")), new BigDecimal("200")));
+            notifications.sent().forEach(n -> System.out.println("   " + n));
+            System.out.println("   -> the plain @EventListener announced a payment that never happened");
+
+            notifications.clear();
+            scenario("8. Events inside a transaction that commits", accounts,
+                    () -> bulk.payAll("ACC-1", Map.of("ACC-2", new BigDecimal("150")), new BigDecimal("200")));
+            notifications.sent().forEach(n -> System.out.println("   " + n));
+
             System.out.println("\nTotal money in bank (readOnly tx): " + transfers.totalMoneyInBank());
         }
     }

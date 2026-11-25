@@ -2,7 +2,7 @@
 
 ## How a request flows
 ```
-HTTP request -> Tomcat -> DispatcherServlet -> HandlerInterceptor.preHandle
+HTTP request -> Tomcat -> Filter(s) -> DispatcherServlet -> HandlerInterceptor.preHandle
              -> HandlerMapping finds the @GetMapping/@PostMapping method
              -> arguments resolved (@PathVariable, @RequestParam, @RequestBody + @Valid, @RequestHeader)
              -> controller -> service -> ...
@@ -17,7 +17,17 @@ HTTP request -> Tomcat -> DispatcherServlet -> HandlerInterceptor.preHandle
 - **ResponseEntity**: control status codes and headers (201 + `Location`, 204).
 - **Validation**: `@Valid @RequestBody` returns HTTP 400 automatically (lesson 12).
 - **Global error handling**: `@RestControllerAdvice` + `@ExceptionHandler`, returning **ProblemDetail** (RFC 9457).
-- **Interceptors** (`HandlerInterceptor`), **CORS** (`addCorsMappings`).
+- **Filter vs interceptor**:
+  | | Servlet `Filter` (`CommonHeadersFilter`) | `HandlerInterceptor` (`RequestIdInterceptor`) |
+  |---|---|---|
+  | Lives in | the servlet container, before Spring MVC | Spring MVC, around the controller |
+  | Runs for | **every** request (unknown URLs, static files, errors) | only requests that matched a handler |
+  | Knows the handler method? | no | yes |
+  | Typical uses | security (Spring Security is a filter chain), CORS, compression, logging, headers | per-endpoint checks, model attributes, timing |
+- **CORS** (`addCorsMappings`).
+- **File upload and download** (`FileController`): `MultipartFile` from a `multipart/form-data` request, which needs a
+  `MultipartResolver` bean and a `MultipartConfigElement` with size limits (over the limit is **413**).
+  Downloads set `Content-Type` and `Content-Disposition: attachment`. Never use the client's file name as a path.
 - **Request DTO vs response model**: `TaskRequest` vs `Task`, so clients cannot set server-owned fields like `id`.
 - **REST conventions**: nouns in URLs (`/api/tasks`), HTTP verbs for actions, correct status codes
   (200 OK, 201 Created, 204 No Content, 400 Bad Request, 404 Not Found, 409 Conflict, 500).

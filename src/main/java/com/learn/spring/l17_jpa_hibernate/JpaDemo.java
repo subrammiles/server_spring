@@ -4,6 +4,7 @@ import org.hibernate.LazyInitializationException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.learn.spring.l17_jpa_hibernate.entity.Author;
+import com.learn.spring.l17_jpa_hibernate.entity.Book;
 
 public class JpaDemo {
 
@@ -39,6 +40,23 @@ public class JpaDemo {
             step("N+1 problem vs JOIN FETCH");
             System.out.println("naive      : " + library.titlesWithAuthorsNaive().sqlStatements() + " SQL statements");
             System.out.println("join fetch : " + library.titlesWithAuthorsJoinFetch().sqlStatements() + " SQL statement");
+
+            step("optimistic locking: two users edit the same book");
+            Long hobbitId = library.findBooksByAuthorName("J.R.R. Tolkien").getFirst().getId();
+            Book alice = library.findBook(hobbitId);
+            Book bob = library.findBook(hobbitId);
+            System.out.println("both loaded version " + alice.getVersion());
+            alice.setTitle("The Hobbit (illustrated)");
+            System.out.println("alice saves -> version " + library.saveBook(alice).getVersion());
+            bob.setTitle("The Hobbit, or There and Back Again");
+            try {
+                library.saveBook(bob);
+            } catch (RuntimeException e) {
+                System.out.println("bob saves   -> " + e.getClass().getSimpleName() + ": reload and try again");
+            }
+
+            step("pessimistic locking: SELECT ... FOR UPDATE");
+            System.out.println(library.retitleWithLock(hobbitId, "The Hobbit") + " version " + library.findBook(hobbitId).getVersion());
 
             step("orphanRemoval and cascade delete");
             library.removeFirstBook(tolkienId);

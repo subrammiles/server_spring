@@ -17,7 +17,7 @@ shows what Boot does for you. Continue with the `server_spring_boot` repository 
 ```bash
 mvn -q compile exec:java                    # list lessons
 mvn -q compile exec:java -Dexec.args=05     # run lesson 05's demo
-mvn test                                    # run all 64 tests
+mvn test                                    # run all 78 tests
 ```
 Or open the project in IntelliJ/Eclipse/VS Code and run any `*Demo` class's `main` method.
 
@@ -29,11 +29,11 @@ Or open the project in IntelliJ/Eclipse/VS Code and run any `*Demo` class's `mai
 | 01 | [Life without Spring](src/main/java/com/learn/spring/l01_without_spring) | coupling, interfaces, dependency injection by hand, IoC |
 | 02 | [XML configuration](src/main/java/com/learn/spring/l02_xml_config) | ApplicationContext, beans, constructor/setter injection, collections, aliases |
 | 03 | [Java configuration](src/main/java/com/learn/spring/l03_java_config) | `@Configuration`, `@Bean`, `@Import`, CGLIB proxies for inter-bean calls |
-| 04 | [Component scanning](src/main/java/com/learn/spring/l04_component_scan) | stereotypes, `@ComponentScan`, constructor vs setter vs field injection, layering |
+| 04 | [Component scanning](src/main/java/com/learn/spring/l04_component_scan) | stereotypes, `@ComponentScan`, constructor vs setter vs field injection, layering, circular dependencies |
 | 05 | [Choosing between beans](src/main/java/com/learn/spring/l05_autowiring_choices) | `@Primary`, `@Qualifier`, custom qualifiers, `List`/`Map` injection, `ObjectProvider` |
 | 06 | [Scopes](src/main/java/com/learn/spring/l06_bean_scopes) | singleton, prototype, web scopes, the prototype-in-singleton trap, `@Lazy` |
 | 07 | [Lifecycle](src/main/java/com/learn/spring/l07_bean_lifecycle) | `@PostConstruct`/`@PreDestroy`, Aware interfaces, `BeanPostProcessor`, `BeanFactoryPostProcessor` |
-| 08 | [Externalized config](src/main/java/com/learn/spring/l08_externalized_config) | `@PropertySource`, `@Value`, `Environment`, SpEL, `Resource`, i18n `MessageSource` |
+| 08 | [Externalized config](src/main/java/com/learn/spring/l08_externalized_config) | `@PropertySource`, `@Value`, `Environment`, SpEL, type conversion (`Converter`, `Formatter`), `Resource`, i18n `MessageSource` |
 | 09 | [Profiles and conditions](src/main/java/com/learn/spring/l09_profiles_conditions) | `@Profile`, `@Conditional`, how Boot auto-configuration works |
 | 10 | [Events](src/main/java/com/learn/spring/l10_events) | `ApplicationEventPublisher`, `@EventListener`, ordering, conditions, chaining |
 | 11 | [AOP](src/main/java/com/learn/spring/l11_aop) | aspects, pointcuts, all advice types, custom annotations, proxy limits |
@@ -45,14 +45,14 @@ Or open the project in IntelliJ/Eclipse/VS Code and run any `*Demo` class's `mai
 | # | Lesson | You will learn |
 |---|---|---|
 | 15 | [Spring JDBC](src/main/java/com/learn/spring/l15_jdbc) | `DataSource`, `JdbcTemplate`, named parameters, `JdbcClient`, batch, exception translation |
-| 16 | [Transactions](src/main/java/com/learn/spring/l16_transactions) | ACID, `@Transactional`, rollback rules, propagation, `TransactionTemplate`, pitfalls |
-| 17 | [JPA and Hibernate](src/main/java/com/learn/spring/l17_jpa_hibernate) | entities, relationships, persistence context, dirty checking, lazy loading, N+1 |
-| 18 | [Spring Data JPA](src/main/java/com/learn/spring/l18_spring_data_jpa) | repositories, derived queries, `@Query`, paging, projections, auditing |
+| 16 | [Transactions](src/main/java/com/learn/spring/l16_transactions) | ACID, `@Transactional`, rollback rules, propagation, `TransactionTemplate`, `@TransactionalEventListener`, pitfalls |
+| 17 | [JPA and Hibernate](src/main/java/com/learn/spring/l17_jpa_hibernate) | entities, relationships, persistence context, dirty checking, lazy loading, N+1, optimistic and pessimistic locking |
+| 18 | [Spring Data JPA](src/main/java/com/learn/spring/l18_spring_data_jpa) | repositories, derived queries, `@Query`, paging, projections, Specifications, Query by Example, auditing |
 
 ### Part 3: Web
 | # | Lesson | You will learn |
 |---|---|---|
-| 19 | [REST with Spring MVC](src/main/java/com/learn/spring/l19_web_mvc) | `DispatcherServlet`, embedded Tomcat, REST controllers, validation, `ProblemDetail` errors, interceptors, CORS |
+| 19 | [REST with Spring MVC](src/main/java/com/learn/spring/l19_web_mvc) | `DispatcherServlet`, embedded Tomcat, REST controllers, validation, `ProblemDetail` errors, filters vs interceptors, file upload/download, CORS |
 
 ### Part 4: Testing
 | # | Lesson | You will learn |
